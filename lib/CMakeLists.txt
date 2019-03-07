@@ -103,10 +103,10 @@ endif()
 
 if(LINUX)
 if(HAS_LIBUSB AND ATCA_HAL_KIT_HID)
-target_link_libraries(cryptoauth usb-1.0)
+target_link_libraries(cryptoauth usb-1.0 crypto)
 elseif(HAS_UDEV AND ATCA_HAL_KIT_HID)
-target_link_libraries(cryptoauth udev)
+target_link_libraries(cryptoauth udev crypto)
 endif()
-target_link_libraries(cryptoauth rt)
+target_link_libraries(cryptoauth rt crypto)
 endif()
 

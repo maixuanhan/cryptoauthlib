@@ -52,9 +52,9 @@ ATCAIfaceCfg* eccx08_get_iface_default(ATCAIfaceType iType)
     //case ATCA_SWI_IFACE:
     //    return &cfg_ateccx08a_swi_default;
     case ATCA_UART_IFACE:
-        return &cfg_atecc508a_kitcdc_default;
+        return &cfg_ateccx08a_kitcdc_default;
     case ATCA_HID_IFACE:
-        return &cfg_atecc508a_kithid_default;
+        return &cfg_ateccx08a_kithid_default;
     default:
         return NULL;
     }
@@ -100,9 +100,9 @@ int eccx08_platform_init(void)
 {
     /* Get a pointer to the default configuration */
 #ifdef ATCA_HAL_KIT_CDC
-    pCfg = &cfg_atecc508a_kitcdc_default;
+    pCfg = &cfg_ateccx08a_kitcdc_default;
 #elif ATCA_HAL_KIT_HID
-    pCfg = &cfg_atecc508a_kithid_default;
+    pCfg = &cfg_ateccx08a_kithid_default;
 #elif ATCA_HAL_I2C
     pCfg = &cfg_ateccx08a_i2c_default;
 #endif
