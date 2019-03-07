@@ -454,3 +454,13 @@ Edit the mchp-cryptoauth.rules file and add the following line to the file:
 ```text
 SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2312", MODE="0666"
 ```
+
+Compile:
+```bash
+rm -rf build
+mkdir build
+cd build
+
+cmake ../lib/ -DATCA_HAL_KIT_HID=1 -DATCA_PRINTF=1
+make
+```
