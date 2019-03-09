@@ -34,6 +34,14 @@
 #include "atca_start_config.h"
 #include "atca_start_iface.h"
 
+#ifdef ECC_DEBUG
+#include <stdio.h>
+char * eccx08_strip_path_hal(char * in_str);
+#define DEBUG_HAL(f, ...)    fprintf(stderr, "\e[33m$$HAL: %s:%d:%s(): " f "\e[39m", eccx08_strip_path_hal(__FILE__), __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#else
+#define DEBUG_HAL(...)   asm("nop")
+#endif
+
 /** \defgroup hal_ Hardware abstraction layer (hal_)
  *
  * \brief

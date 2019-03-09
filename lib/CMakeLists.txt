@@ -11,6 +11,12 @@ option(ATCA_MBEDTLS "Integrate with mbedtls")
 option(ATCA_BUILD_SHARED_LIBS "Build CryptoAuthLib as shared library" ON)
 set(BUILD_SHARED_LIBS ${ATCA_BUILD_SHARED_LIBS})
 
+# local openssl
+set(OPENSSL_INSTALL_DIR /home/hanmai/code/work/openssl)
+
+# Openssl dynamic engine support
+add_definitions(-DENGINE_DYNAMIC_SUPPORT)
+
 # Collect Library Sources
 file(GLOB LIB_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "*.c")
 file(GLOB ATCACERT_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "atcacert/*.c")
@@ -32,7 +38,7 @@ elseif(APPLE)
 set(CRYPTOAUTH_SRC ${CRYPTOAUTH_SRC} hal/hal_linux_timer.c)
 set(HID_SRC ../third_party/hidapi/mac/hid.c)
 elseif(UNIX)
-set(CRYPTOAUTH_SRC ${CRYPTOAUTH_SRC} hal/hal_linux_timer.c)
+set(CRYPTOAUTH_SRC ${CRYPTOAUTH_SRC} hal/hal_linux_timer.c hal/hal_linux_os.c)
 set(TWI_SRC hal/hal_linux_i2c_userspace.c)
 set(LINUX TRUE)
 endif()
@@ -42,6 +48,7 @@ find_path(LIBUSB_INCLUDE_DIR NAMES libusb.h PATH_SUFFIXES "include" "libusb" "li
 find_path(LIBUDEV_INCLUDE_DIR NAMES libudev.h PATH_SUFFIXES "include")
 find_library(HAS_LIBUSB usb-1.0)
 find_library(HAS_LIBUDEV udev)
+set(LIB_UDEV_DEV "-ludev")
 if(HAS_LIBUSB AND LIBUSB_INCLUDE_DIR)
 set(HID_SRC ../third_party/hidapi/libusb/hid.c)
 elseif(HAS_LIBUDEV AND LIBUDEV_INCLUDE_DIR)
@@ -51,7 +58,7 @@ else()
 message(FATAL_ERROR, "Missing Build Dependencies for ATCA_HAL_KIT_HID - install libusb-1.0-0-dev or libudev-dev")
 endif()
 else()
-set(LIBUSD_INCLUDE_DIR "")
+set(LIBUSB_INCLUDE_DIR "")
 endif()
 
 if(ATCA_HAL_KIT_HID)
@@ -85,10 +92,10 @@ set_target_properties(cryptoauth PROPERTIES OUTPUT_NAME "ateccx08pkcs11")
 endif(ATCA_PKCS11)
 
 if(ATCA_PRINTF)
-add_definitions(-DATCAPRINTF -DECC_DEBUG)
+add_definitions(-DATCAPRINTF -DECC_DEBUG -DKIT_DEBUG)
 endif(ATCA_PRINTF)
 
-include_directories(cryptoauth PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ../third_party/hidapi/hidapi ${LIBUSB_INCLUDE_DIR})
+include_directories(cryptoauth PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ../third_party/hidapi/hidapi ${LIBUSB_INCLUDE_DIR} ${OPENSSL_INSTALL_DIR}/include)
 
 if(WIN32)
 set_target_properties(cryptoauth PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS true)
@@ -103,10 +110,10 @@ endif()
 
 if(LINUX)
 if(HAS_LIBUSB AND ATCA_HAL_KIT_HID)
-target_link_libraries(cryptoauth usb-1.0 crypto)
-elseif(HAS_UDEV AND ATCA_HAL_KIT_HID)
-target_link_libraries(cryptoauth udev crypto)
+target_link_libraries(cryptoauth usb-1.0)
+elseif(HAS_LIBUDEV AND ATCA_HAL_KIT_HID)
+target_link_libraries(cryptoauth udev ${LIB_UDEV_DEV})
 endif()
-target_link_libraries(cryptoauth rt crypto)
+target_link_libraries(cryptoauth rt -L${OPENSSL_INSTALL_DIR}/lib -lcrypto -lssl)
 endif()
 

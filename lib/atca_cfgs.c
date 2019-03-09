@@ -72,10 +72,10 @@ ATCAIfaceCfg cfg_ateccx08a_kitcdc_default = {
 /** \brief default configuration for Kit protocol over the device's async interface */
 ATCAIfaceCfg cfg_ateccx08a_kithid_default = {
     .iface_type         = ATCA_HID_IFACE,
-    .devtype            = ATECC508A,
+    .devtype            = ATECC608A,
     .atcahid.idx        = 0,
     .atcahid.vid        = 0x03EB,
-    .atcahid.pid        = 0x2312,
+    .atcahid.pid        = 0x2169,
     .atcahid.packetsize = 64,
     .atcahid.guid       = { 0x4d,        0x1e, 0x55, 0xb2, 0xf1, 0x6f, 0x11, 0xcf, 0x88, 0xcb, 0x00, 0x11, 0x11, 0x00, 0x00, 0x30 },
 };

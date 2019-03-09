@@ -645,6 +645,8 @@ static int eccx08_pkey_ec_keygen(EVP_PKEY_CTX *ctx, EVP_PKEY *pkey)
             break;
         }
 
+        DEBUG_ENGINE("atcab_init_safe(), status=%d\n", status);
+
         /* Openssl raw key has a leading byte with conversion form id */
         raw_pubkey[0] = POINT_CONVERSION_UNCOMPRESSED;
 

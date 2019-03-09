@@ -55,19 +55,24 @@ struct {
 /** \brief Lock the global mutex */
 ATCA_STATUS eccx08_global_lock(void)
 {
+    DEBUG_ENGINE("Entered\n");
     ATCA_STATUS status = ATCA_SUCCESS;
+    DEBUG_ENGINE("global_lock_handle=%p\n", global_lock.handle);
     if (!global_lock.handle)
     {
         if (ATCA_SUCCESS != (status = hal_os_create_mutex(&global_lock.handle, engine_eccx08_mutex_name)))
         {
+            DEBUG_ENGINE("hal_os_create_mutex() failed. status=%d\n", status);
             return status;
         }
         global_lock.state = 0;
     }
 
+    DEBUG_ENGINE("global_lock_state=%d\n", global_lock.state);
     if (!global_lock.state)
     {
         status = hal_os_lock_mutex(global_lock.handle);
+        DEBUG_ENGINE("hal_os_lock_mutex() done, status: %d\n", status);
         if (ATCA_FUNC_FAIL == status)
         {
             /* Mutex was obtained but we're in an unknown state */
@@ -87,6 +92,7 @@ ATCA_STATUS eccx08_global_lock(void)
 /** \brief Unlock the global mutex */
 ATCA_STATUS eccx08_global_unlock(void)
 {
+    DEBUG_ENGINE("Entered. handle=%p\n", global_lock.handle);
     ATCA_STATUS status = hal_os_unlock_mutex(global_lock.handle);
 
     if (ATCA_SUCCESS == status)
@@ -100,23 +106,34 @@ ATCA_STATUS eccx08_global_unlock(void)
 /** \brief Thin abstraction on atcab_init that incorporates a global locking mechanism*/
 ATCA_STATUS atcab_init_safe(ATCAIfaceCfg *cfg)
 {
+    DEBUG_ENGINE("Entered\n");
     ATCA_STATUS status = eccx08_global_lock();
+    DEBUG_ENGINE("eccx08_global_lock() done. status=%d\n", status);
 
     if (ATCA_SUCCESS != status)
     {
+        eccx08_global_unlock();
         return status;
     }
 
-    return atcab_init(cfg);
+    status = atcab_init(cfg);
+    if (ATCA_SUCCESS != status)
+    {
+        eccx08_global_unlock();
+    }
+
+    return status;
 }
 
 /** \brief Thin abstraction on atcab_release that incorporates a global locking mechanism*/
 ATCA_STATUS atcab_release_safe(void)
 {
+    DEBUG_ENGINE("Entered\n");
     ATCA_STATUS status = eccx08_global_lock();
 
     if (ATCA_SUCCESS != status)
     {
+        eccx08_global_unlock();
         return status;
     }
 
@@ -164,6 +181,7 @@ static int eccx08_init(ENGINE *e)
     {
         if (hal_os_create_mutex(&global_lock.handle, engine_eccx08_mutex_name))
         {
+            DEBUG_ENGINE("INIT FAILED\n");
             return ENGINE_OPENSSL_FAILURE;
         }
         global_lock.state = 0;
