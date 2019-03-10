@@ -85,6 +85,7 @@ char kit_id_from_devtype(ATCADeviceType devtype)
  */
 ATCA_STATUS kit_init(ATCAIface iface)
 {
+    DEBUG_HAL("Entered\n");
     ATCA_STATUS status = ATCA_SUCCESS;
     const char kit_device[] = "board:device(%02X)\n";
     const char kit_device_select[] = "%c:physical:select(%02X)\n";
@@ -173,6 +174,7 @@ ATCA_STATUS kit_init(ATCAIface iface)
  */
 ATCA_STATUS kit_send(ATCAIface iface, const uint8_t* txdata, int txlength)
 {
+    DEBUG_HAL("Entered\n");
     ATCA_STATUS status = ATCA_SUCCESS;
     int nkitbuf = txlength * 2 + KIT_TX_WRAP_SIZE;
     char* pkitbuf = NULL;
@@ -215,6 +217,7 @@ ATCA_STATUS kit_send(ATCAIface iface, const uint8_t* txdata, int txlength)
  */
 ATCA_STATUS kit_receive(ATCAIface iface, uint8_t* rxdata, uint16_t* rxsize)
 {
+    DEBUG_HAL("Entered\n");
     ATCA_STATUS status = ATCA_SUCCESS;
     uint8_t kitstatus = 0;
     int nkitbuf = 0;
@@ -262,6 +265,7 @@ ATCA_STATUS kit_receive(ATCAIface iface, uint8_t* rxdata, uint16_t* rxsize)
  */
 ATCA_STATUS kit_wake(ATCAIface iface)
 {
+    DEBUG_HAL("Entered\n");
     ATCA_STATUS status = ATCA_SUCCESS;
     uint8_t kitstatus = 0;
     char wake[] = "d:w()\n";
@@ -307,6 +311,7 @@ ATCA_STATUS kit_wake(ATCAIface iface)
  */
 ATCA_STATUS kit_idle(ATCAIface iface)
 {
+    DEBUG_HAL("Entered\n");
     ATCA_STATUS status = ATCA_SUCCESS;
     uint8_t kitstatus = 0;
     char idle[] = "d:i()\n";
@@ -352,6 +357,7 @@ ATCA_STATUS kit_idle(ATCAIface iface)
  */
 ATCA_STATUS kit_sleep(ATCAIface iface)
 {
+    DEBUG_HAL("Entered\n");
     ATCA_STATUS status = ATCA_SUCCESS;
     uint8_t kitstatus = 0;
 

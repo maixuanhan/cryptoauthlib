@@ -63,7 +63,8 @@ endif()
 
 if(ATCA_HAL_KIT_HID)
 add_definitions(-DATCA_HAL_KIT_HID)
-set(CRYPTOAUTH_SRC ${CRYPTOAUTH_SRC} hal/kit_protocol.c hal/hal_all_platforms_kit_hidapi.c ${HID_SRC})
+# set(CRYPTOAUTH_SRC ${CRYPTOAUTH_SRC} hal/kit_protocol.c hal/hal_all_platforms_kit_hidapi.c ${HID_SRC})
+set(CRYPTOAUTH_SRC ${CRYPTOAUTH_SRC} hal/kit_protocol.c hal/hal_linux_kit_hid.c ${HID_SRC})
 endif(ATCA_HAL_KIT_HID)
 
 if(ATCA_HAL_KIT_CDC)

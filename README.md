@@ -462,5 +462,6 @@ mkdir build
 cd build
 
 cmake ../lib/ -DATCA_HAL_KIT_HID=1 -DATCA_PRINTF=1
+# cmake ../lib/ -DATCA_HAL_KIT_CDC=1 -DATCA_PRINTF=1
 make
 ```

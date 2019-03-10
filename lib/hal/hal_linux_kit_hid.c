@@ -89,6 +89,8 @@ ATCA_STATUS hal_kit_hid_init(void* hal, ATCAIfaceCfg* cfg)
     FILE *file_descriptor = NULL;
     int index = 0;
 
+    DEBUG_HAL("Entered\n");
+
     // Check the input variables
     if ((cfg == NULL) || (phal == NULL))
     {
@@ -218,6 +220,7 @@ ATCA_STATUS hal_kit_hid_init(void* hal, ATCAIfaceCfg* cfg)
  */
 ATCA_STATUS hal_kit_hid_post_init(ATCAIface iface)
 {
+    DEBUG_HAL("Entered\n");
     ATCA_STATUS status = ATCA_SUCCESS;
     atcahid_t* pHid = atgetifacehaldat(iface);
     ATCAIfaceCfg *pCfg = atgetifacecfg(iface);
@@ -249,6 +252,7 @@ ATCA_STATUS hal_kit_hid_post_init(ATCAIface iface)
  */
 ATCA_STATUS kit_phy_send(ATCAIface iface, uint8_t* txdata, int txlength)
 {
+    DEBUG_HAL("Entered\n");
     ATCAIfaceCfg *cfg = atgetifacecfg(iface);
     atcahid_t* pHid = (atcahid_t*)atgetifacehaldat(iface);
     size_t bytes_written = 0;
@@ -286,6 +290,7 @@ ATCA_STATUS kit_phy_send(ATCAIface iface, uint8_t* txdata, int txlength)
  */
 ATCA_STATUS kit_phy_receive(ATCAIface iface, uint8_t* rxdata, int* rxsize)
 {
+    DEBUG_HAL("Entered\n");
     ATCAIfaceCfg *cfg = atgetifacecfg(iface);
     atcahid_t* pHid = (atcahid_t*)atgetifacehaldat(iface);
     bool continue_read = true;
@@ -348,6 +353,7 @@ ATCA_STATUS kit_phy_num_found(int8_t* num_found)
  */
 ATCA_STATUS hal_kit_hid_send(ATCAIface iface, uint8_t* txdata, int txlength)
 {
+    DEBUG_HAL("Entered\n");
     // Call the kit_send() function that will call phy_send() implemented below
     return kit_send(iface, txdata, txlength);
 }
@@ -360,6 +366,7 @@ ATCA_STATUS hal_kit_hid_send(ATCAIface iface, uint8_t* txdata, int txlength)
  */
 ATCA_STATUS hal_kit_hid_receive(ATCAIface iface, uint8_t* rxdata, uint16_t* rxsize)
 {
+    DEBUG_HAL("Entered\n");
     // Call the kit_receive() function that will call phy_receive() implemented below
     return kit_receive(iface, rxdata, rxsize);
 }
@@ -370,6 +377,7 @@ ATCA_STATUS hal_kit_hid_receive(ATCAIface iface, uint8_t* rxdata, uint16_t* rxsi
  */
 ATCA_STATUS hal_kit_hid_wake(ATCAIface iface)
 {
+    DEBUG_HAL("Entered\n");
     // Call the kit_wake() function that will call phy_send() and phy_receive()
     return kit_wake(iface);
 }
@@ -380,6 +388,7 @@ ATCA_STATUS hal_kit_hid_wake(ATCAIface iface)
  */
 ATCA_STATUS hal_kit_hid_idle(ATCAIface iface)
 {
+    DEBUG_HAL("Entered\n");
     // Call the kit_idle() function that will call phy_send() and phy_receive()
     return kit_idle(iface);
 }
@@ -390,6 +399,7 @@ ATCA_STATUS hal_kit_hid_idle(ATCAIface iface)
  */
 ATCA_STATUS hal_kit_hid_sleep(ATCAIface iface)
 {
+    DEBUG_HAL("Entered\n");
     // Call the kit_sleep() function that will call phy_send() and phy_receive()
     return kit_sleep(iface);
 }
@@ -400,6 +410,7 @@ ATCA_STATUS hal_kit_hid_sleep(ATCAIface iface)
  */
 ATCA_STATUS hal_kit_hid_release(void* hal_data)
 {
+    DEBUG_HAL("Entered\n");
     atcahid_t* phaldat = (atcahid_t*)hal_data;
     int i = 0;
 
