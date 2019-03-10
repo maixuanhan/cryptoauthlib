@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include "atca_iface.h"
 #include "hal/atca_hal.h"
+#include "atca_debug.h"
 
 /** \defgroup interface ATCAIface (atca_)
  *  \brief Abstract interface to all CryptoAuth device types.  This interface
@@ -55,6 +56,7 @@ ATCA_STATUS _atinit(ATCAIface ca_iface, ATCAHAL_t *hal);
  */
 ATCA_STATUS initATCAIface(ATCAIfaceCfg *cfg, ATCAIface ca_iface)
 {
+    DEBUG_ATCA("Entered\n");
     ATCA_STATUS status;
 
     if (cfg == NULL || ca_iface == NULL)
@@ -66,6 +68,7 @@ ATCA_STATUS initATCAIface(ATCAIfaceCfg *cfg, ATCAIface ca_iface)
     ca_iface->mIfaceCFG = cfg;
 
     status = atinit(ca_iface);
+    DEBUG_ATCA("ainit. status=%d \n", status);
     if (status != ATCA_SUCCESS)
     {
         return status;

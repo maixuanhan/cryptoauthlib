@@ -107,6 +107,8 @@ ATCA_STATUS hal_kit_cdc_init(void* hal, ATCAIfaceCfg* cfg)
     uint32_t index = 0;
     int fd;
 
+    DEBUG_HAL("Entered\n");
+
     // Check the input variables
     if ((hal == NULL) || (cfg == NULL))
     {
@@ -166,6 +168,7 @@ ATCA_STATUS hal_kit_cdc_init(void* hal, ATCAIfaceCfg* cfg)
  */
 ATCA_STATUS hal_kit_cdc_post_init(ATCAIface iface)
 {
+    DEBUG_HAL("Entered\n");
     ATCA_STATUS status = ATCA_SUCCESS;
     atcacdc_t* phaldat = atgetifacehaldat(iface);
     ATCAIfaceCfg *cfg = atgetifacecfg(iface);
@@ -196,6 +199,7 @@ ATCA_STATUS hal_kit_cdc_post_init(ATCAIface iface)
  */
 ATCA_STATUS kit_phy_send(ATCAIface iface, const char* txdata, int txlength)
 {
+    DEBUG_HAL("Entered\n");
     ATCA_STATUS status = ATCA_SUCCESS;
     ATCAIfaceCfg *cfg = atgetifacecfg(iface);
     int cdcid = cfg->atcauart.port;
@@ -219,6 +223,7 @@ ATCA_STATUS kit_phy_send(ATCAIface iface, const char* txdata, int txlength)
 
     // Write the bytes to the specified com port
     bytesWritten = write(pCdc->kits[cdcid].write_handle, txdata, txlength);
+    DEBUG_HAL("status=%d, bytesWritten=%ld\n", status, bytesWritten);
 
     return status;
 }
@@ -231,6 +236,7 @@ ATCA_STATUS kit_phy_send(ATCAIface iface, const char* txdata, int txlength)
  */
 ATCA_STATUS kit_phy_receive(ATCAIface iface, char* rxdata, int* rxsize)
 {
+    DEBUG_HAL("Entered\n");
     ATCA_STATUS status = ATCA_SUCCESS;
     ATCAIfaceCfg *cfg = atgetifacecfg(iface);
     int cdcid = cfg->atcauart.port;
@@ -260,7 +266,9 @@ ATCA_STATUS kit_phy_receive(ATCAIface iface, char* rxdata, int* rxsize)
         // Read all of the bytes
         while (continue_read == true)
         {
+            DEBUG_HAL("read_handle=%d\n", pCdc->kits[cdcid].read_handle);
             bytes_read = read(pCdc->kits[cdcid].read_handle, buffer, CDC_BUFFER_MAX);
+            DEBUG_HAL("bytes_read=%d\n", bytes_read);
 
             // Find the location of the '\n' character in read buffer
             // todo: generalize this read...  it only applies if there is an ascii protocol with an <eom> of \n and if the <eom> exists
@@ -329,6 +337,7 @@ ATCA_STATUS hal_kit_cdc_send(ATCAIface iface, uint8_t* txdata, int txlength)
  */
 ATCA_STATUS hal_kit_cdc_receive(ATCAIface iface, uint8_t* rxdata, uint16_t* rxsize)
 {
+    DEBUG_HAL("Entered\n");
     // Call the hal_kit_receive() function that will call hal_phy_receive() implemented below
     return kit_receive(iface, rxdata, rxsize);
 }
@@ -339,6 +348,7 @@ ATCA_STATUS hal_kit_cdc_receive(ATCAIface iface, uint8_t* rxdata, uint16_t* rxsi
  */
 ATCA_STATUS hal_kit_cdc_wake(ATCAIface iface)
 {
+    DEBUG_HAL("Entered\n");
     // Call the hal_kit_wake() function that will call hal_phy_send() and hal_phy_receive()
     return kit_wake(iface);
 }
@@ -349,6 +359,7 @@ ATCA_STATUS hal_kit_cdc_wake(ATCAIface iface)
  */
 ATCA_STATUS hal_kit_cdc_idle(ATCAIface iface)
 {
+    DEBUG_HAL("Entered\n");
     // Call the hal_kit_idle() function that will call hal_phy_send() and hal_phy_receive()
     return kit_idle(iface);
 }
@@ -359,6 +370,7 @@ ATCA_STATUS hal_kit_cdc_idle(ATCAIface iface)
  */
 ATCA_STATUS hal_kit_cdc_sleep(ATCAIface iface)
 {
+    DEBUG_HAL("Entered\n");
     // Call the hal_kit_sleep() function that will call hal_phy_send() and hal_phy_receive()
     return kit_sleep(iface);
 }
@@ -369,6 +381,7 @@ ATCA_STATUS hal_kit_cdc_sleep(ATCAIface iface)
  */
 ATCA_STATUS hal_kit_cdc_release(void* hal_data)
 {
+    DEBUG_HAL("Entered\n");
     int i = 0;
     atcacdc_t* phaldat = (atcacdc_t*)hal_data;
 

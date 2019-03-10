@@ -27,6 +27,7 @@
 
 #include <stdlib.h>
 #include "atca_device.h"
+#include "atca_debug.h"
 
 /** \defgroup device ATCADevice (atca_)
  * \brief ATCADevice object - composite of command and interface objects
@@ -40,6 +41,7 @@
  */
 ATCADevice newATCADevice(ATCAIfaceCfg *cfg)
 {
+    DEBUG_ATCA("Entered\n");
     ATCADevice ca_dev = NULL;
     ATCA_STATUS status;
 
@@ -89,6 +91,7 @@ ATCADevice newATCADevice(ATCAIfaceCfg *cfg)
  */
 void deleteATCADevice(ATCADevice *ca_dev)
 {
+    DEBUG_ATCA("Entered\n");
     if (ca_dev == NULL)
     {
         return;
@@ -117,6 +120,7 @@ void deleteATCADevice(ATCADevice *ca_dev)
  */
 ATCA_STATUS initATCADevice(ATCAIfaceCfg *cfg, ATCADevice ca_dev)
 {
+    DEBUG_ATCA("Entered\n");
     ATCA_STATUS status;
 
     if (cfg == NULL || ca_dev == NULL || ca_dev->mCommands == NULL || ca_dev->mIface == NULL)
@@ -125,12 +129,14 @@ ATCA_STATUS initATCADevice(ATCAIfaceCfg *cfg, ATCADevice ca_dev)
     }
 
     status = initATCACommand(cfg->devtype, ca_dev->mCommands);
+    DEBUG_ATCA("init ATCA Command. status=%d \n", status);
     if (status != ATCA_SUCCESS)
     {
         return status;
     }
 
     status = initATCAIface(cfg, ca_dev->mIface);
+    DEBUG_ATCA("init ATCA Iface. status=%d \n", status);
     if (status != ATCA_SUCCESS)
     {
         return status;
@@ -163,6 +169,7 @@ ATCAIface atGetIFace(ATCADevice dev)
  */
 ATCA_STATUS releaseATCADevice(ATCADevice ca_dev)
 {
+    DEBUG_ATCA("Entered\n");
     if (ca_dev == NULL)
     {
         return ATCA_BAD_PARAM;

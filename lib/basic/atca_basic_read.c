@@ -617,6 +617,8 @@ ATCA_STATUS atcab_read_bytes_zone(uint8_t zone, uint16_t slot, size_t offset, ui
     size_t copy_length = 0;
     size_t read_offset = 0;
 
+    DEBUG_BASIC("Entered\n");
+
     if (zone != ATCA_ZONE_CONFIG && zone != ATCA_ZONE_OTP && zone != ATCA_ZONE_DATA)
     {
         return ATCA_BAD_PARAM;

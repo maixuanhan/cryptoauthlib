@@ -46,6 +46,14 @@
 extern "C" {
 #endif
 
+#ifdef ECC_DEBUG
+#include <stdio.h>
+char * eccx08_strip_path_basic(char * in_str);
+#define DEBUG_BASIC(f, ...)    fprintf(stderr, "\e[32m$$ATCA_BASIC: %s:%d:%s(): " f "\e[39m", eccx08_strip_path_basic(__FILE__), __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#else
+#define DEBUG_BASIC(...)   asm("nop")
+#endif
+
 #define BLOCK_NUMBER(a)             (a / 32)
 #define WORD_OFFSET(a)              ((a % 32) / 4)
 

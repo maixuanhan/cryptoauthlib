@@ -30,6 +30,27 @@
 #include "atca_basic.h"
 #include "host/atca_host.h"
 
+#ifdef ECC_DEBUG
+char * eccx08_strip_path_basic(char * in_str)
+{
+    char * tmp = in_str;
+    char * rv;
+
+    if (!in_str)
+        return "";
+#ifdef _WIN32
+    while (tmp = strchr(tmp, '\\'))
+#else
+    while (tmp = strchr(tmp, '/'))
+#endif
+    {
+        rv = ++tmp;
+    }
+
+    return rv;
+}
+#endif
+
 const char atca_version[] = { "20190304" };  // change for each release, yyyymmdd
 ATCADevice _gDevice = NULL;
 #ifdef ATCA_NO_HEAP
@@ -65,6 +86,7 @@ ATCA_STATUS atcab_version(char *ver_str)
 ATCA_STATUS atcab_init(ATCAIfaceCfg *cfg)
 {
     ATCA_STATUS status = ATCA_GEN_FAIL;
+    DEBUG_BASIC("Entered. _gDevice=%p\n", _gDevice);
 
     // If a device has already been initialized, release it
     if (_gDevice)
@@ -83,6 +105,7 @@ ATCA_STATUS atcab_init(ATCAIfaceCfg *cfg)
     _gDevice = &g_atcab_device;
 #else
     _gDevice = newATCADevice(cfg);
+    DEBUG_BASIC("Create new ATCA device. _gDevice=%p\n", _gDevice);
     if (_gDevice == NULL)
     {
         return ATCA_GEN_FAIL;
@@ -109,6 +132,7 @@ ATCA_STATUS atcab_init(ATCAIfaceCfg *cfg)
  */
 ATCA_STATUS atcab_init_device(ATCADevice ca_device)
 {
+    DEBUG_BASIC("Entered\n");
     if (ca_device == NULL)
     {
         return ATCA_BAD_PARAM;
@@ -136,6 +160,8 @@ ATCA_STATUS atcab_init_device(ATCADevice ca_device)
  */
 ATCA_STATUS atcab_release(void)
 {
+    DEBUG_BASIC("Entered\n");
+
 #ifdef ATCA_NO_HEAP
     ATCA_STATUS status = releaseATCADevice(_gDevice);
     if (status != ATCA_SUCCESS)
@@ -162,6 +188,7 @@ ATCADevice atcab_get_device(void)
  */
 ATCADeviceType atcab_get_device_type(void)
 {
+    DEBUG_BASIC("Entered\n");
     if (_gDevice)
     {
         return _gDevice->mIface->mIfaceCFG->devtype;
@@ -177,6 +204,7 @@ ATCADeviceType atcab_get_device_type(void)
  */
 ATCA_STATUS atcab_wakeup(void)
 {
+    DEBUG_BASIC("Entered\n");
     if (_gDevice == NULL)
     {
         return ATCA_GEN_FAIL;
@@ -190,6 +218,7 @@ ATCA_STATUS atcab_wakeup(void)
  */
 ATCA_STATUS atcab_idle(void)
 {
+    DEBUG_BASIC("Entered\n");
     if (_gDevice == NULL)
     {
         return ATCA_GEN_FAIL;
@@ -203,6 +232,7 @@ ATCA_STATUS atcab_idle(void)
  */
 ATCA_STATUS atcab_sleep(void)
 {
+    DEBUG_BASIC("Entered\n");
     if (_gDevice == NULL)
     {
         return ATCA_GEN_FAIL;
@@ -230,6 +260,8 @@ ATCA_STATUS atcab_cfg_discover(ATCAIfaceCfg cfg_array[], int max_ifaces)
     int iface_num = 0;
     int found = 0;
     int i = 0;
+
+    DEBUG_BASIC("Entered\n");
 
 // this cumulatively gathers all the interfaces enabled by #defines
 
@@ -326,6 +358,7 @@ ATCA_STATUS _atcab_exit(void)
  */
 ATCA_STATUS atcab_get_addr(uint8_t zone, uint16_t slot, uint8_t block, uint8_t offset, uint16_t* addr)
 {
+    DEBUG_BASIC("Entered\n");
     ATCA_STATUS status = ATCA_SUCCESS;
     uint8_t mem_zone = zone & 0x03;
 
@@ -371,6 +404,8 @@ ATCA_STATUS atcab_get_addr(uint8_t zone, uint16_t slot, uint8_t block, uint8_t o
  */
 ATCA_STATUS atcab_get_zone_size(uint8_t zone, uint16_t slot, size_t* size)
 {
+    DEBUG_BASIC("Entered\n");
+
     ATCA_STATUS status = ATCA_SUCCESS;
 
     if (size == NULL)

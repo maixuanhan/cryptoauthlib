@@ -60,7 +60,7 @@ ATCAIfaceCfg cfg_ateccx08a_swi_default = {
 /** \brief default configuration for Kit protocol over the device's async interface */
 ATCAIfaceCfg cfg_ateccx08a_kitcdc_default = {
     .iface_type         = ATCA_UART_IFACE,
-    .devtype            = ATECC508A,
+    .devtype            = ATECC608A,
     .atcauart.port      = 0,
     .atcauart.baud      = 115200,
     .atcauart.wordsize  = 8,
